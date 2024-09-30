@@ -10,7 +10,8 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
-        "rakutentech/laravel-request-docs": "^2.32"
+        "rakutentech/laravel-request-docs": "^2.41",
+        "spatie/laravel-query-builder": "^6.2"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.15",
