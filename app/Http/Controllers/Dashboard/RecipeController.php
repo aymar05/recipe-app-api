@@ -91,6 +91,7 @@ class RecipeController extends Controller
         $recipe = Recipe::with(['steps', 'ingredients', 'comments', 'tags'])
             ->findOrFail($id);
         $data = $request->validated();
+
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')
                 ->storePublicly(Recipe::IMAGE_FOLDER);

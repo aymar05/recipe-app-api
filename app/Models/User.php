@@ -20,6 +20,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property mixed $password
  * @property string $role
  * @property string|null $remember_token
+ * @property string|null $picture
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Comment> $comments
@@ -51,6 +52,12 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    const IMAGE_FOLDER = 'public/profiles';
+
+    protected $appends = [
+        'image_url',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -61,6 +68,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'picture'
     ];
 
     /**
@@ -101,5 +109,10 @@ class User extends Authenticatable
     public function recipeRequests(): HasMany
     {
         return $this->hasMany(RecipeRequest::class);
+    }
+
+    public function getImageUrlAttribute(): ?string
+    {
+        return $this->picture === null ? null : 'storage/' . substr($this->picture, 7);
     }
 }
