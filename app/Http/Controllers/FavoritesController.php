@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RecipeFilterRequest;
 use App\Models\Favorite;
+use App\Models\Recipe;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -30,6 +31,10 @@ class FavoritesController extends Controller
 
     public function store(int $recipeId, Request $request): Response
     {
+        $recipeExists = Recipe::where('id', $recipeId)
+            ->exists();
+        abort_unless($recipeExists, 404);
+
         /** @var User $user */
         $user = $request->user();
         $inFavorites = Favorite::where('user_id', $user->id)

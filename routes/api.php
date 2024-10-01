@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Dashboard\IngredientController;
 use App\Http\Controllers\Dashboard\RecipeController as DashboardRecipeController;
 use App\Http\Controllers\Dashboard\RecipeRequestController;
@@ -50,4 +51,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('favorites', [FavoritesController::class, 'index']);
     Route::post('recipes/{id}/favorites', [FavoritesController::class, 'store']);
     Route::delete('favorites/{id}', [FavoritesController::class, 'destroy']);
+
+    Route::post('recipes/{id}/comments', [CommentController::class, 'store']);
+    Route::put('comments/{id}', [CommentController::class, 'update']);
+    Route::delete('comments/{id}', [CommentController::class, 'destroy']);
 });
