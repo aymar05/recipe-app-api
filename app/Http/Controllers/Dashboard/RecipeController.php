@@ -9,6 +9,7 @@ use App\Http\Requests\RecipeUpdateRequest;
 use App\Models\Ingredient;
 use App\Models\Recipe;
 use App\Models\RecipeStep;
+use App\Models\Tag;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -21,7 +22,7 @@ class RecipeController extends Controller
     {
         return response()->json(
             QueryBuilder::for(Recipe::class)
-                ->with(['steps', 'ingredients', 'comments'])
+                ->with(['steps', 'ingredients', 'comments', 'tags'])
                 ->allowedFilters(['name'])
                 ->paginate(
                     perPage: $request->input('per_page', 10),
@@ -32,7 +33,7 @@ class RecipeController extends Controller
 
     public function show(int $id): JsonResponse
     {
-        $recipe = Recipe::with(['steps', 'ingredients', 'comments'])
+        $recipe = Recipe::with(['steps', 'ingredients', 'comments', 'tags'])
             ->findOrFail($id);
         return response()->json($recipe);
     }
@@ -47,10 +48,8 @@ class RecipeController extends Controller
         $data['image'] = $request->file('image')
             ->storePublicly(Recipe::IMAGE_FOLDER);
         $recipe = Recipe::create($data);
-        if ($request->filled('steps'))
-        {
-            foreach ($request->input('steps') as $step)
-            {
+        if ($request->filled('steps')) {
+            foreach ($request->input('steps') as $step) {
                 RecipeStep::create([
                     'recipe_id'   => $recipe->id,
                     'name'        => $step['name'],
@@ -60,10 +59,8 @@ class RecipeController extends Controller
             }
         }
 
-        if ($request->filled('ingredients'))
-        {
-            foreach ($request->input('ingredients') as $ingredient)
-            {
+        if ($request->filled('ingredients')) {
+            foreach ($request->input('ingredients') as $ingredient) {
                 Ingredient::create([
                     'recipe_id' => $recipe->id,
                     'name'      => $ingredient['name'],
@@ -73,21 +70,40 @@ class RecipeController extends Controller
             }
         }
 
+        if ($request->filled('tags')) {
+            $tagsData = $request->input('tags');
+            $tags = array_map(fn($tag) => ['name' => $tag], $tagsData);
+            Tag::upsert($tags, ['name'], ['name']);
+            $tagIds = Tag::whereIn('name', $tagsData)
+                ->pluck('id');
+            $recipe->tags()->sync($tagIds);
+        }
+
         DB::commit();
-        $recipe->load(['steps', 'ingredients']);
+        $recipe->load(['steps', 'ingredients', 'tags']);
         return response()->json($recipe);
     }
 
     public function update(int $id, RecipeUpdateRequest $request): JsonResponse
     {
-        $recipe = Recipe::with(['steps', 'ingredients', 'comments'])
+        /** @var Recipe $recipe */
+        $recipe = Recipe::with(['steps', 'ingredients', 'comments', 'tags'])
             ->findOrFail($id);
         $data = $request->validated();
-        if ($request->hasFile('image'))
-        {
+        if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')
                 ->storePublicly(Recipe::IMAGE_FOLDER);
         }
+
+        if ($request->filled('tags')) {
+            $tagsData = $request->input('tags');
+            $tags = array_map(fn($tag) => ['name' => $tag], $tagsData);
+            Tag::upsert($tags, ['name'], ['name']);
+            $tagIds = Tag::whereIn('name', $tagsData)
+                ->pluck('id');
+            $recipe->tags()->sync($tagIds);
+        }
+
         $recipe->update($data);
         return response()->json($recipe);
     }

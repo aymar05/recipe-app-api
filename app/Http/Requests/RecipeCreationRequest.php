@@ -33,6 +33,8 @@ class RecipeCreationRequest extends FormRequest
             'ingredients.*.name'     => 'string|required|max:255',
             'ingredients.*.quantity' => 'integer|numeric|required|min:1',
             'ingredients.*.measure'  => 'string|required',
+            'tags'                   => 'array|nullable',
+            'tags.*'                 => 'string|required'
         ];
     }
 }

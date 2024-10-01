@@ -32,6 +32,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereTime($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereUpdatedAt($value)
+ * @property-read string $image_url
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
+ * @property-read int|null $tags_count
  * @mixin \Eloquent
  */
 class Recipe extends Model
@@ -62,6 +65,11 @@ class Recipe extends Model
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class);
     }
 
     public function getImageUrlAttribute(): string

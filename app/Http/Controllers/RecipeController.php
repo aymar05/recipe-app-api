@@ -13,7 +13,7 @@ class RecipeController extends Controller
     {
         return response()->json(
             QueryBuilder::for(Recipe::class)
-                ->with(['steps', 'ingredients', 'comments'])
+                ->with(['steps', 'ingredients', 'comments', 'tags'])
                 ->allowedFilters(['name'])
                 ->paginate(
                     perPage: $request->input('per_page', 10),
@@ -24,7 +24,7 @@ class RecipeController extends Controller
 
     public function show(int $id): JsonResponse
     {
-        $recipe = Recipe::with(['steps', 'ingredients', 'comments'])
+        $recipe = Recipe::with(['steps', 'ingredients', 'comments', 'tags'])
             ->findOrFail($id);
         return response()->json($recipe);
     }

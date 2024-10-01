@@ -22,9 +22,11 @@ class RecipeUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'string|required',
-            'image' => 'image|max:4096|nullable',
-            'time'  => 'integer|numeric|required',
+            'title'  => 'string|required',
+            'image'  => 'image|max:4096|nullable',
+            'time'   => 'integer|numeric|required',
+            'tags'   => 'array|nullable',
+            'tags.*' => 'string|required'
         ];
     }
 }

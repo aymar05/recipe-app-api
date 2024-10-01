@@ -23,6 +23,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|RecipeStep whereUpdatedAt($value)
  * @property int $duration
  * @method static \Illuminate\Database\Eloquent\Builder|RecipeStep whereDuration($value)
+ * @property string $name
+ * @property int $recipe_id
+ * @property-read \App\Models\Recipe $recipe
+ * @method static \Illuminate\Database\Eloquent\Builder|RecipeStep whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RecipeStep whereRecipeId($value)
  * @mixin \Eloquent
  */
 class RecipeStep extends Model
