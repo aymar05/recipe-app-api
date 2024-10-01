@@ -40,6 +40,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property-read int|null $steps_count
  * @method static \Illuminate\Database\Eloquent\Builder|RecipeRequest whereRecipeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|RecipeRequest whereStatus($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\RecipeRequestIngredient> $ingredients
+ * @property-read int|null $ingredients_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\RecipeRequestTag> $tags
+ * @property-read int|null $tags_count
  * @mixin \Eloquent
  */
 class RecipeRequest extends Model
@@ -62,6 +66,12 @@ class RecipeRequest extends Model
         return $this->hasMany(RecipeRequestStep::class);
     }
 
+    public function ingredients(): HasMany
+    {
+        return $this->hasMany(RecipeRequestIngredient::class);
+    }
+
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -70,5 +80,10 @@ class RecipeRequest extends Model
     public function recipe(): HasOne
     {
         return $this->hasOne(Recipe::class);
+    }
+
+    public function tags(): HasMany
+    {
+        return $this->hasMany(RecipeRequestTag::class);
     }
 }

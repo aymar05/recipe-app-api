@@ -22,13 +22,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|RecipeRequestStep whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|RecipeRequestStep whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|RecipeRequestStep whereUpdatedAt($value)
+ * @property int $recipe_request_id
+ * @method static \Illuminate\Database\Eloquent\Builder|RecipeRequestStep whereRecipeRequestId($value)
  * @mixin \Eloquent
  */
 class RecipeRequestStep extends Model
 {
     protected $fillable = [
         'name',
-        'description'
+        'description',
+        'duration',
+        'recipe_request_id'
     ];
 
     public function recipeRequest(): BelongsTo

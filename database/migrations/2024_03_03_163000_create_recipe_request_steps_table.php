@@ -15,7 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description');
-
+            $table->integer('duration');
+            $table->foreignId('recipe_request_id')
+                ->constrained()
+                ->cascadeOnDelete();
             $table->timestamps();
         });
     }

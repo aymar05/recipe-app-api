@@ -35,6 +35,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read string $image_url
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
  * @property-read int|null $tags_count
+ * @property int|null $recipe_request_id
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereRecipeRequestId($value)
  * @mixin \Eloquent
  */
 class Recipe extends Model
@@ -44,6 +46,7 @@ class Recipe extends Model
         'image',
         'evaluation',
         'time',
+        'recipe_request_id',
     ];
 
     protected $appends = [

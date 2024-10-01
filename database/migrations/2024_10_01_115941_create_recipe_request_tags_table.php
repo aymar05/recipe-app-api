@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\RequestStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,15 +10,11 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('recipe_requests', function (Blueprint $table) {
+        Schema::create('recipe_request_tags', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('image');
-            $table->integer('preparation_time');
-            $table->string('status')->default(RequestStatus::Pending->value);
-            $table->foreignId('user_id')
+            $table->string('name');
+            $table->foreignId('recipe_request_id')
                 ->constrained()
-                ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->timestamps();
         });
@@ -30,6 +25,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('recipe_requests');
+        Schema::dropIfExists('recipe_request_tags');
     }
 };

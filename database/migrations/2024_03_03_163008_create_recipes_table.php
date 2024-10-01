@@ -16,6 +16,11 @@ return new class extends Migration {
             $table->string('image');
             $table->float('evaluation')->nullable();
             $table->integer('time');
+            $table->foreignId('recipe_request_id')
+                ->nullable()
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->timestamps();
         });
     }
