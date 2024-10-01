@@ -23,6 +23,7 @@ class RecipeFilterRequest extends FormRequest
     {
         return [
             'filter[title]' => 'string|nullable',
+            'filter[tags]'  => 'array|nullable',
             'page'          => 'integer|numeric|nullable|min:1',
             'per_page'      => 'integer|numeric|nullable|min:1',
         ];

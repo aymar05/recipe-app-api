@@ -13,6 +13,7 @@ use App\Models\Tag;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 use Throwable;
 
@@ -23,7 +24,7 @@ class RecipeController extends Controller
         return response()->json(
             QueryBuilder::for(Recipe::class)
                 ->with(['steps', 'ingredients', 'comments', 'tags'])
-                ->allowedFilters(['name'])
+                ->allowedFilters(['name', AllowedFilter::exact('tags', 'tags.name')])
                 ->paginate(
                     perPage: $request->input('per_page', 10),
                     page: $request->input('page', 1)

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RecipeFilterRequest;
 use App\Models\Recipe;
 use Illuminate\Http\JsonResponse;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class RecipeController extends Controller
@@ -14,7 +15,7 @@ class RecipeController extends Controller
         return response()->json(
             QueryBuilder::for(Recipe::class)
                 ->with(['steps', 'ingredients', 'comments', 'tags'])
-                ->allowedFilters(['name'])
+                ->allowedFilters(['name', AllowedFilter::exact('tags', 'tags.name')])
                 ->paginate(
                     perPage: $request->input('per_page', 10),
                     page: $request->input('page', 1)
