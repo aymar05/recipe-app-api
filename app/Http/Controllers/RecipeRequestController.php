@@ -21,7 +21,11 @@ class RecipeRequestController extends Controller
     {
         return response()->json(
             QueryBuilder::for(RecipeRequest::class)
+<<<<<<< HEAD
                 ->with(['steps', 'recipe', 'tags'])
+=======
+                ->with(['steps', 'recipe'])
+>>>>>>> 8cf9601e2a4c4a074f5a7643bede636eec61104d
                 ->where('user_id', $request->user()->id)
                 ->allowedFilters(['name', AllowedFilter::exact('status')])
                 ->paginate(

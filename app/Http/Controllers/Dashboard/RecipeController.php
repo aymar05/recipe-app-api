@@ -25,7 +25,10 @@ class RecipeController extends Controller
             QueryBuilder::for(Recipe::class)
                 ->with(['steps', 'ingredients', 'comments', 'tags'])
                 ->allowedFilters(['name', AllowedFilter::exact('tags', 'tags.name')])
+<<<<<<< HEAD
                 ->latest()
+=======
+>>>>>>> 8cf9601e2a4c4a074f5a7643bede636eec61104d
                 ->paginate(
                     perPage: $request->input('per_page', 10),
                     page: $request->input('page', 1)

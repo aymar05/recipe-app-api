@@ -77,6 +77,10 @@ class Recipe extends Model
 
     public function getImageUrlAttribute(): string
     {
+<<<<<<< HEAD
         return 'storage/' . ltrim(substr($this->image, 7), '/');
+=======
+        return 'storage' . substr($this->image, 7);
+>>>>>>> 8cf9601e2a4c4a074f5a7643bede636eec61104d
     }
 }
