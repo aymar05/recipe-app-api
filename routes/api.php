@@ -47,7 +47,8 @@ Route::prefix('dashboard')
 
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::prefix('recipe-requests')->group(function () {
+    Route::prefix('recipes')->group(function () {
+        Route::get('/search', [RecipeController::class, 'search']);
         Route::get('/', [RecipeController::class, 'index']);
         Route::get('{id}', [RecipeController::class, 'show']);
 

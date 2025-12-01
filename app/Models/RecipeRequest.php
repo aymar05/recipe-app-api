@@ -61,13 +61,10 @@ class RecipeRequest extends Model
         'status' => RequestStatus::class,
     ];
 
-<<<<<<< HEAD
     protected $appends = [
         'image_url',
     ];
 
-=======
->>>>>>> 8cf9601e2a4c4a074f5a7643bede636eec61104d
     public function steps(): HasMany
     {
         return $this->hasMany(RecipeRequestStep::class);
@@ -93,12 +90,9 @@ class RecipeRequest extends Model
     {
         return $this->hasMany(RecipeRequestTag::class);
     }
-<<<<<<< HEAD
 
     public function getImageUrlAttribute(): string
     {
         return 'storage/' . ltrim(substr($this->image, 7), '/');
     }
-=======
->>>>>>> 8cf9601e2a4c4a074f5a7643bede636eec61104d
 }

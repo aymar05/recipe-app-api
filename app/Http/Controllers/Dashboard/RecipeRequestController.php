@@ -25,11 +25,7 @@ class RecipeRequestController extends Controller
     {
         return response()->json(
             QueryBuilder::for(RecipeRequest::class)
-<<<<<<< HEAD
                 ->with(['steps', 'ingredients', 'recipe', 'user', 'tags'])
-=======
-                ->with(['steps', 'ingredients', 'recipe', 'user'])
->>>>>>> 8cf9601e2a4c4a074f5a7643bede636eec61104d
                 ->allowedFilters(['name', AllowedFilter::exact('status')])
                 ->paginate(
                     perPage: $request->input('per_page', 10),
@@ -40,11 +36,7 @@ class RecipeRequestController extends Controller
 
     public function show(int $id): JsonResponse
     {
-<<<<<<< HEAD
         return response()->json(RecipeRequest::with(['steps', 'recipe', 'user', 'ingredients', 'tags'])
-=======
-        return response()->json(RecipeRequest::with(['steps', 'recipe', 'user', 'ingredients'])
->>>>>>> 8cf9601e2a4c4a074f5a7643bede636eec61104d
             ->findOrFail($id));
     }
 

@@ -25,10 +25,7 @@ class RecipeController extends Controller
             QueryBuilder::for(Recipe::class)
                 ->with(['steps', 'ingredients', 'comments', 'tags'])
                 ->allowedFilters(['name', AllowedFilter::exact('tags', 'tags.name')])
-<<<<<<< HEAD
                 ->latest()
-=======
->>>>>>> 8cf9601e2a4c4a074f5a7643bede636eec61104d
                 ->paginate(
                     perPage: $request->input('per_page', 10),
                     page: $request->input('page', 1)
@@ -89,8 +86,13 @@ class RecipeController extends Controller
         return response()->json($recipe);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function update(int $id, RecipeUpdateRequest $request): JsonResponse
     {
+        DB::beginTransaction();
+
         /** @var Recipe $recipe */
         $recipe = Recipe::with(['steps', 'ingredients', 'comments', 'tags'])
             ->findOrFail($id);
@@ -110,7 +112,37 @@ class RecipeController extends Controller
             $recipe->tags()->sync($tagIds);
         }
 
+        if ($request->filled('steps')) {
+            $recipe->steps()->delete();
+            foreach ($request->input('steps') as $step) {
+                RecipeStep::create([
+                    'recipe_id'   => $recipe->id,
+                    'name'        => $step['name'],
+                    'description' => $step['description'],
+                    'duration'    => $step['duration'],
+                ]);
+            }
+        }
+
+        if ($request->filled('ingredients')) {
+            $recipe->ingredients()->delete();
+            foreach ($request->input('ingredients') as $ingredient) {
+                Ingredient::create([
+                    'recipe_id' => $recipe->id,
+                    'name'      => $ingredient['name'],
+                    'quantity'  => $ingredient['quantity'],
+                    'measure'   => $ingredient['measure'],
+                ]);
+            }
+        }
+
         $recipe->update($data);
+
+        DB::commit();
+
+        $recipe->refresh();
+        $recipe->load(['steps', 'ingredients', 'tags', 'comments']);
+
         return response()->json($recipe);
     }
 

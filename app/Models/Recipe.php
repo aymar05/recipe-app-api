@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * App\Models\Recipe
@@ -77,10 +78,20 @@ class Recipe extends Model
 
     public function getImageUrlAttribute(): string
     {
-<<<<<<< HEAD
         return 'storage/' . ltrim(substr($this->image, 7), '/');
-=======
-        return 'storage' . substr($this->image, 7);
->>>>>>> 8cf9601e2a4c4a074f5a7643bede636eec61104d
+    }
+    public function scopeSearchRecipes(Builder $query, string $search): Builder
+    {
+        return $query->where(function ($q) use ($search) {
+            $q->where('title', 'LIKE', "%{$search}%")
+
+              ->orWhereHas('tags', function ($subQuery) use ($search) {
+                  $subQuery->where('name', 'LIKE', "%{$search}%");
+              })
+
+              ->orWhereHas('ingredients', function ($subQuery) use ($search) {
+                  $subQuery->where('name', 'LIKE', "%{$search}%");
+              });
+        });
     }
 }
