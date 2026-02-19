@@ -21,15 +21,26 @@ class RecipeController extends Controller
 {
     public function index(RecipeFilterRequest $request): JsonResponse
     {
+        // FIX: Correction du filtre 'name' → 'title' pour correspondre au vrai champ en base
+        $query = QueryBuilder::for(Recipe::class)
+            ->with(['steps', 'ingredients', 'comments', 'tags'])
+            ->allowedFilters([
+                'title',
+                AllowedFilter::exact('tags', 'tags.name'),
+            ])
+            ->latest();
+
+        // FIX: Gestion du paramètre 'search' envoyé par le frontend pour la recherche globale
+        // Ce paramètre est distinct des filtres QueryBuilder et permet une recherche LIKE sur le titre
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->input('search') . '%');
+        }
+
         return response()->json(
-            QueryBuilder::for(Recipe::class)
-                ->with(['steps', 'ingredients', 'comments', 'tags'])
-                ->allowedFilters(['name', AllowedFilter::exact('tags', 'tags.name')])
-                ->latest()
-                ->paginate(
-                    perPage: $request->input('per_page', 10),
-                    page: $request->input('page', 1)
-                )
+            $query->paginate(
+                perPage: $request->input('per_page', 10),
+                page: $request->input('page', 1)
+            )
         );
     }
 
@@ -50,6 +61,7 @@ class RecipeController extends Controller
         $data['image'] = $request->file('image')
             ->storePublicly(Recipe::IMAGE_FOLDER);
         $recipe = Recipe::create($data);
+
         if ($request->filled('steps')) {
             foreach ($request->input('steps') as $step) {
                 RecipeStep::create([

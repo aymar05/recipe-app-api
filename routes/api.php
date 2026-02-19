@@ -5,6 +5,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Dashboard\IngredientController;
 use App\Http\Controllers\Dashboard\RecipeController as DashboardRecipeController;
 use App\Http\Controllers\Dashboard\RecipeRequestController as DashboardRecipeRequestController;
+use App\Http\Controllers\Dashboard\StatsController;
 use App\Http\Controllers\Dashboard\StepController;
 use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\ProfileController;
@@ -21,6 +22,9 @@ Route::post('logout', [AuthController::class, 'logout'])
 Route::prefix('dashboard')
     ->middleware(['auth:sanctum', 'abilities:admin'])
     ->group(function () {
+
+        Route::get('/stats', [StatsController::class, 'index']);
+
         Route::prefix('recipes')->group(function () {
             Route::get('/', [DashboardRecipeController::class, 'index']);
             Route::post('/', [DashboardRecipeController::class, 'store']);

@@ -27,6 +27,7 @@ class RecipeRequestController extends Controller
             QueryBuilder::for(RecipeRequest::class)
                 ->with(['steps', 'ingredients', 'recipe', 'user', 'tags'])
                 ->allowedFilters(['name', AllowedFilter::exact('status')])
+                ->latest()
                 ->paginate(
                     perPage: $request->input('per_page', 10),
                     page: $request->input('page', 1)

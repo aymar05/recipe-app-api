@@ -22,11 +22,12 @@ class RecipeRequestController extends Controller
         return response()->json(
             QueryBuilder::for(RecipeRequest::class)
                 ->with(['steps', 'recipe', 'tags'])
-                ->where('user_id', $request->user()->id)
+                ->where('user_id', $request->user()->id) 
                 ->allowedFilters(['name', AllowedFilter::exact('status')])
+                ->latest()
                 ->paginate(
-                    perPage: $request->input('per_page', 1),
-                    page: $request->input('page', 10)
+                    perPage: $request->input('per_page', 10),
+                    page: $request->input('page', 1)
                 )
         );
     }
